@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GoGoSonicSHOP</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; background: #f4f4f4; }
+    header, footer { background: #007bff; color: white; text-align: center; padding: 1rem; }
+    .container { padding: 1rem; }
+    .product, form { background: white; padding: 1rem; border-radius: 10px; margin-bottom: 1rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    label { display: block; margin-top: 1rem; }
+    input, select, button { width: 100%; padding: 0.5rem; margin-top: 0.3rem; border: 1px solid #ccc; border-radius: 5px; }
+    .btn-green { background: green; color: white; border: none; cursor: pointer; margin-top: 1rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>GoGoSonicSHOP</h1>
+    <p>Jasa Sosial Media Cepat & Terpercaya</p>
+  </header>
+
+  <div class="container">
+    <div class="product">
+      <h2>Daftar Produk & Harga</h2>
+      <ul>
+        <li><b>Instagram Followers</b>: Rp45.500 / 1000</li>
+        <li><b>Instagram Likes</b>: Rp1.000 / 1000</li>
+        <li><b>Instagram Views</b>: Rp100 / 1000</li>
+        <li><b>TikTok Followers</b>: Rp25.500 / 1000</li>
+        <li><b>TikTok Views</b>: Rp1.000 / 1000</li>
+      </ul>
+    </div>
+
+    <form onsubmit="return kirimPesanan()">
+      <h2>Form Pemesanan</h2>
+
+      <label for="layanan">Pilih Layanan:</label>
+      <select id="layanan" onchange="ubahTargetDanHarga()" required>
+        <option value="">-- Pilih --</option>
+        <option value="ig-followers">Instagram Followers</option>
+        <option value="ig-likes">Instagram Likes</option>
+        <option value="ig-views">Instagram Views</option>
+        <option value="tt-followers">TikTok Followers</option>
+        <option value="tt-views">TikTok Views</option>
+      </select>
+
+      <label id="label-target" for="target">Username / Link:</label>
+      <input type="text" id="target" placeholder="Masukkan target" required>
+
+      <label for="jumlah">Jumlah (minimal 10):</label>
+      <input type="number" id="jumlah" min="10" required oninput="hitungHarga()">
+
+      <label for="harga">Total Harga:</label>
+      <input type="text" id="harga" readonly>
+
+      <label for="metode">Metode Pembayaran:</label>
+      <select id="metode" required>
+        <option value="DANA">DANA - 083870743757</option>
+        <option value="GOPAY">GoPay - 083870743757</option>
+        <option value="QRIS">QRIS (Scan via WhatsApp)</option>
+      </select>
+
+      <button type="submit" class="btn-green">Pesan Sekarang</button>
+    </form>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 GoGoSonicSHOP</p>
+  </footer>
+
+  <script>
+    function ubahTargetDanHarga() {
+      const jenis = document.getElementById('layanan').value;
+      const label = document.getElementById('label-target');
+      label.innerText = (jenis.includes('likes') || jenis.includes('views')) ? 'Link Video:' : 'Username:';
+      hitungHarga();
+    }
+
+    function hitungHarga() {
+      const jenis = document.getElementById('layanan').value;
+      const jumlah = parseInt(document.getElementById('jumlah').value) || 0;
+      let hargaPer1000 = 0;
+
+      switch (jenis) {
+        case 'ig-followers': hargaPer1000 = 45500; break;
+        case 'ig-likes': hargaPer1000 = 1000; break;
+        case 'ig-views': hargaPer1000 = 100; break;
+        case 'tt-followers': hargaPer1000 = 25500; break;
+        case 'tt-views': hargaPer1000 = 1000; break;
+      }
+
+      const total = (jumlah / 1000) * hargaPer1000;
+      document.getElementById('harga').value = 'Rp ' + total.toLocaleString('id-ID');
+    }
+
+    function kirimPesanan() {
+      const layanan = document.getElementById('layanan').value;
+      const target = document.getElementById('target').value;
+      const jumlah = document.getElementById('jumlah').value;
+      const harga = document.getElementById('harga').value;
+      const metode = document.getElementById('metode').value;
+
+      const pesan = `Halo admin, saya ingin order:\nLayanan: ${layanan}\nTarget: ${target}\nJumlah: ${jumlah}\nHarga: ${harga}\nMetode Pembayaran: ${metode}`;
+      const waURL = `https://wa.me/6283870743757?text=${encodeURIComponent(pesan)}`;
+      window.open(waURL, '_blank');
+      return false;
+    }
+  </script>
+</body>
+</html>
